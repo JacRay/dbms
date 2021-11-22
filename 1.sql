@@ -28,9 +28,7 @@ CREATE TABLE PURCHASE (
   custno VARCHAR(15) NOT NULL,
   prono VARCHAR(15) NOT NULL,
   quantity INT NOT NULL,
-  orderdate DATE,
-  FOREIGN KEY(custno) REFERENCES CUSTOMER(cust_no),
-  FOREIGN KEY(prono) REFERENCES PRODUCT(product_no)
+  orderdate DATE
 );
 -- insert
 INSERT INTO PRODUCT VALUES ('P00001', '12 W Flood', 'Wipro', 5000);
@@ -65,3 +63,67 @@ SELECT * FROM PURCHASE;
 SELECT * FROM PRODUCT;
 SELECT * FROM CUSTOMER;
 SELECT * FROM SUPPLIER;
+
+-- query
+-- 1
+SELECT * from CUSTOMER where city = 'Madras';
+-- 2
+SELECT custno FROM PURCHASE WHERE MONTH(orderdate) = 1;
+-- 3
+SELECT * FROM PRODUCT WHERE price > 5000;
+-- 4
+SELECT * FROM CUSTOMER WHERE name NOT LIKE 'r%';
+-- 5
+ALTER TABLE CUSTOMER ADD email VARCHAR(30);
+-- 6
+SELECT * FROM CUSTOMER WHERE age>40 and state = 'Maharastra';
+-- 7
+SELECT * FROM PRODUCT ORDER BY price ASC;
+-- 8
+SELECT AVG(age) FROM CUSTOMER;
+-- 9
+SELECT distinct city FROM CUSTOMER WHERE state = 'Maharastra' or state = 'Tamilnadu';
+-- 10
+SELECT AVG(price) FROM PRODUCT;
+-- 11
+SELECT CUSTOMER.* from CUSTOMER, PURCHASE  WHERE CUSTOMER.cust_no = PURCHASE.custno ORDER BY quantity;
+-- 12
+UPDATE PURCHASE SET prono = 'P00008' WHERE custno = 'C00003';
+-- 13
+SELECT COUNT(*) as cust_count FROM CUSTOMER  WHERE city="Delhi";
+-- 14
+SELECT cust_no,quantity FROM PURCHASE  WHERE quantity > 3;
+-- 15
+ALTER TABLE PURCHASE MODIFY (orderdate char);
+-- 16
+SELECT MIN(price)as min_price , MAX(price) as max_price FROM PRODUCT;
+-- 17
+SELECT COUNT(product_no) as comp_count,company FROM PRODUCT WHERE company IN ('HCL','Wipro') GROUP BY company;
+-- 18
+SELECT * FROM CUSTOMER ORDER BY name;
+-- 19
+SELECT * FROM PURCHASE ORDER BY orderdate;
+-- 20
+DELETE FROM PRODUCT WHERE product_no= 'P00003';
+-- 21
+CREATE TABLE ordertable
+  ( order_no VARCHAR(30),
+    orderdate DATE
+   );
+   
+INSERT INTO ordertable(order_no,orderdate) SELECT order_no,orderdate FROM PURCHASE;
+-- 22
+DROP TABLE ordertable;
+-- 23
+CREATE VIEW CUST AS SELECT * FROM CUSTOMER;
+-- 24
+SELECT name FROM CUSTOMER WHERE cust_no IN (SELECT cust_no FROM PURCHASE WHERE quantity > 1);
+-- 25
+SELECT * 
+FROM PURCHASE INNER JOIN CUSTOMER WHERE  CUSTOMER.state in (SELECT  state from CUSTOMER 
+GROUP BY state HAVING count(*) >1 ) AND PURCHASE.custno=CUSTOMER.cust_no;
+-- 26
+SELECT name FROM CUSTOMER WHERE name like 'R%';
+-- 27
+SELECT DISTINCT name from (SELECT name FROM customer UNION SELECT sname FROM supplier) as name;
+
