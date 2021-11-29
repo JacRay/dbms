@@ -1,29 +1,29 @@
 CREATE TABLE Department (
-  Dep_no  INT PRIMARY KEY,
-  Dep_Name VARCHAR(15) NOT NULL,
-  Loc VARCHAR(15) NOT NULL,
-  Mgr INT NOT NULL,
-  Exp_Bdg INT NOT NULL,
-  Rev_Bdg INT NOT NULL
+  Dep_no  NUMBER PRIMARY KEY,
+  Dep_Name VARCHAR2(15) NOT NULL,
+  Loc VARCHAR2(15) NOT NULL,
+  Mgr NUMBER NOT NULL,
+  Exp_Bdg NUMBER NOT NULL,
+  Rev_Bdg NUMBER NOT NULL
 );
 
 CREATE TABLE Employee (
-  Empno  INT NOT NULL,
-  Name VARCHAR(15) NOT NULL,
-  Job VARCHAR(15) NOT NULL,
-  Salary INT NOT NULL,
-  Comm VARCHAR(15) ,
-  Dept_No INT,
-  Sex VARCHAR(6),
+  Empno  NUMBER NOT NULL,
+  Name VARCHAR2(15) NOT NULL,
+  Job VARCHAR2(15) NOT NULL,
+  Salary NUMBER NOT NULL,
+  Comm VARCHAR2(15) ,
+  Dept_No NUMBER,
+  Sex VARCHAR2(6),
   FOREIGN KEY (Dept_No) REFERENCES Department(Dep_no)
 );
 
 CREATE TABLE Dependant (
-  Pid  INT NOT NULL,
-  FName VARCHAR(15) NOT NULL,
-  Lname VARCHAR(15) NOT NULL,
-  Place VARCHAR(15) NOT NULL,
-  Empno INT NOT NULL
+  Pid  NUMBER NOT NULL,
+  FName VARCHAR2(15) NOT NULL,
+  Lname VARCHAR2(15) NOT NULL,
+  Place VARCHAR2(15) NOT NULL,
+  Empno NUMBER NOT NULL
 );
 
 INSERT INTO Department VALUES (60, 'Shipping', 'Trivandrum', 215, 90000, 0);
@@ -56,3 +56,76 @@ SELECT * FROM Employee where Job = 'MNGR' ORDER BY Name;
 
 -- 2
 
+SELECT * FROM Employee where Dept_No = 40 ORDER BY Empno; 
+
+-- 3
+
+SELECT * FROM Employee where Sex = 'F' ORDER BY Empno;
+
+--4
+
+SELECT Dept_No, MAX(Salary), MIN(Salary), AVG(Salary) FROM Employee Group By Dept_No;
+
+-- 5
+
+SELECT Dept_No, MAX(Comm), MIN(Comm), SUM(Comm), COUNT(Comm) FROM Employee WHERE Comm>0 Group By Dept_No;
+
+-- 6
+
+SELECT Job, COUNT(Job) FROM Employee Group BY Job;
+
+-- 7
+
+SELECT Job, SUM(Salary) FROM Employee Group By Job;
+
+-- 8
+
+SELECT Distinct Dept_No FROM Employee;
+
+--9
+
+SELECT Empno, Name, Salary FROM Employee WHERE Sex = 'F' and Dept_No = 10;
+
+-- 10
+
+SELECT Empno, Name, Salary FROM Employee WHERE Sex = 'M' ORDER BY Name;
+
+-- 11
+
+SELECT Name, Job FROM Employee WHERE Sex = 'F'and  (Job = 'SLSM' or Job = 'MNGR');
+
+-- 12
+
+SELECT Empno, Name FROM Employee WHERE Dept_No = 10 and (Job = 'MNGR' or Job = 'CLRK');
+
+-- 13
+
+SELECT Name, Job FROM Employee WHERE (Not Job = 'CLRK') and (Not Job = 'SLSM');
+
+-- 14
+
+SELECT * FROM Employee WHERE Job = 'CLRK' and Not Dept_No = 10;
+
+-- 15
+
+SELECT Name FROM Employee WHERE Name Like "%U%E%";
+
+-- 16
+
+SELECT * FROM Employee WHERE Comm IS NOT NULL;
+
+-- 17
+
+SELECT Empno, Name, Job FROM Employee WHERE Sex = 'F' and NOT Job = 'MNGR';
+
+-- 18
+
+SELECT Empno, Name, Salary FROM Employee WHERE Salary >10000 and Salary < 40000;
+
+ -- 19
+
+SELECT Name, Empno, Job FROM Employee WHERE Job IN('ANLST', 'MNGR');
+ 
+ -- 20
+
+SELECT Empno, Name, Salary FROM Employee WHERE Comm IS NOT NULL AND Salary > 30000;
